@@ -1,40 +1,45 @@
 package main;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.Executors;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author dfischer17
  */
 public class Main {
-    
-    private Dagger leftDagger = new Dagger();
-    private Dagger rightDagger = new Dagger();
-    
-    private static Ork ork1 = new Ork();
-    private static Ork ork2 = new Ork();
-    private static Ork ork3 = new Ork();
-    private static Ork ork4 = new Ork();
-    private static Ork ork5 = new Ork();
-    
+
+    private static Dagger dagger1 = new Dagger();
+    private static Dagger dagger2 = new Dagger();
+    private static Dagger dagger3 = new Dagger();
+    private static Dagger dagger4 = new Dagger();
+    private static Dagger dagger5 = new Dagger();
+
+    private static Ork ork1;
+    private static Ork ork2;
+    private static Ork ork3;
+    private static Ork ork4;
+    private static Ork ork5;
+
     public static void main(String[] args) {
-        ExecutorService exec = new ScheduledThreadPoolExecutor(4);
-        exec.execute(ork1);
-        exec.execute(ork2);
-        exec.execute(ork3);
-        exec.execute(ork4);
-        exec.execute(ork5);
+        ork1 = new Ork("ork1", dagger1, dagger2);
+        ork2 = new Ork("ork2", dagger2, dagger3);
+        ork3 = new Ork("ork3", dagger3, dagger4);
+        ork4 = new Ork("ork4", dagger4, dagger5);
+        ork5 = new Ork("ork5", dagger5, dagger1);
         
+        ExecutorService executor = Executors.newFixedThreadPool(4);
         
-    }            
+        executor.execute(ork1);
+        executor.execute(ork2);
+        executor.execute(ork3);
+        executor.execute(ork4);
+        executor.execute(ork5);
+        
+    }
 }

@@ -19,4 +19,8 @@ public class Dagger {
     public void release() {
         grabable = true;
     }
+    
+    public boolean isGrabable() {
+        return grabable;
+    }
 }
