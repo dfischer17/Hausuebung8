@@ -13,12 +13,12 @@ import java.util.logging.Logger;
 public class Producer implements Runnable {
 
     /* implement this */
-    private final String name;
-    private final Storage storage;
-    private final int sleepTime;
+    private String name;
+    private Storage storage;
+    private int sleepTime;
 
-    private final List<Integer> sent;
-    private final int numberOfItems;
+    private List<Integer> sent;
+    private int numberOfItems;
 
     public Producer(String name, Storage storage, int sleepTime, int numberOfItems) {
         this.name = name;
@@ -40,15 +40,18 @@ public class Producer implements Runnable {
         for (int i = 0; i < numberOfItems; i++) {
             try {
                 storage.put(i);
-                if (storage.getStoredCounter() != 10) {
+                if (storage.getStoredCounter() <= 10) {
                     sent.add(i);
                 }
+                /*
                 else {
                     Thread.sleep(sleepTime);
                 }
+                */
             } catch (InterruptedException ex) {
                 Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        storage.setProductionComplete();
     }
 }

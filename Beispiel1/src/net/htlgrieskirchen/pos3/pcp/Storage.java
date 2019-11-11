@@ -9,7 +9,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class Storage {
 
-    private final ArrayBlockingQueue<Integer> queue;
+    private ArrayBlockingQueue<Integer> queue;
 
     private int fetchedCounter;
     private int storedCounter;
@@ -18,39 +18,37 @@ public class Storage {
     private boolean productionComplete;
 
     public Storage() {
-        // implement this
-        this.fetchedCounter = fetchedCounter;
-        this.storedCounter = storedCounter;
-        this.underflowCounter = underflowCounter;
-        this.overflowCounter = overflowCounter;
-        this.productionComplete = productionComplete;
+        this.fetchedCounter = 0;
+        this.storedCounter = 0;
+        this.underflowCounter = 0;
+        this.overflowCounter = 0;
+        this.productionComplete = false;
         this.queue = new ArrayBlockingQueue<>(10);
     }
 
-    public synchronized boolean put(Integer data) throws InterruptedException {
-        // implement this
-        queue.offer(data);
-        storedCounter++;
-        if (queue.size() == 10) {
+    public boolean put(Integer data) throws InterruptedException {
+        // implement this       
+        if (queue.remainingCapacity() == 0) {
             overflowCounter++;
             return false;
         }
+
+        queue.put(data);
+        storedCounter++;
         return true;
     }
 
-    public synchronized Integer get() {
+    public Integer get() {
         // implement this
-        try {
-            queue.poll();
-            fetchedCounter++;
-            if (queue.isEmpty()) {
-                underflowCounter++;
-                return null;
-            }
-        } catch (Exception ex) {
 
+        if (queue.poll() == null) {
+            underflowCounter++;
+            return null;
         }
-        return fetchedCounter;
+
+        fetchedCounter++;
+
+        return queue.poll();
 
     }
 
